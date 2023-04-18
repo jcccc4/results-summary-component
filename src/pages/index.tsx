@@ -1,5 +1,60 @@
 import Image from "next/image";
+import useSWR from "swr";
+
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 export default function Home() {
+  interface DataParsed {
+    [key: string]: { category: string; score: string; icon: string };
+  }
+  const { data, error } = useSWR("/api/data", fetcher);
+
+  const colors: string[] = ["red", "yellow", "green", "blue"];
+
+  //Handle the error state
+  if (error) return <div>Failed to load</div>;
+  //Handle the loading state
+  if (!data) return <div>Loading...</div>;
+
+  function bgColor(num: number): string {
+    switch (num) {
+      case 0: {
+        return `bg-red-500 bg-opacity-5 flex justify-between items-center h-14 px-4 rounded-xl`;
+      }
+      case 1: {
+        return `bg-yellow-500 bg-opacity-5 flex justify-between items-center h-14 px-4 rounded-xl`;
+      }
+      case 2: {
+        return `bg-green-500 bg-opacity-5 flex justify-between items-center h-14 px-4 rounded-xl`;
+      }
+      case 3: {
+        return `bg-blue-500 bg-opacity-5 flex justify-between items-center h-14 px-4 rounded-xl`;
+      }
+      default: {
+        return `bg-black-500 bg-opacity-5 flex justify-between items-center h-14 px-4 rounded-xl`;
+      }
+    }
+  }
+  function color(num: number): string {
+    switch (num) {
+      case 0: {
+        return `font-HankenGrotesk-Medium text-base text-font-red lg:text-lg`;
+      }
+      case 1: {
+        return `font-HankenGrotesk-Medium text-base text-font-yellow lg:text-lg`;
+      }
+      case 2: {
+        return `font-HankenGrotesk-Medium text-base text-font-green lg:text-lg`;
+      }
+      case 3: {
+        return `font-HankenGrotesk-Medium text-base text-font-blue lg:text-lg`;
+      }
+      default: {
+        return `font-HankenGrotesk-Medium text-base text-black lg:text-lg`;
+      }
+    }
+  }
+
+  let dataParsed: DataParsed = JSON.parse(data);
   return (
     <main className="lg:flex justify-center items-center h-screen w-screen bg-very-light-blue">
       <div className="lg:h-128 lg:flex lg:w-184 bg-white lg:rounded-custom-box-lg">
@@ -15,11 +70,11 @@ export default function Home() {
               of 100
             </div>
           </div>
-          <div className="text-center w-65 lg:h-33.5 " >
+          <div className="text-center w-65 lg:h-33.5 ">
             <div className="text-2xl text-white font-HankenGrotesk-Medium mb-3 lg:text-8 lg:mb-3.5">
               Great
             </div>
-            <div className="text-base text-custom-blue font-HankenGrotesk-Medium text-custom-blue lg:text-lg">
+            <div className="text-base text-blue-a font-HankenGrotesk-Medium text-blue-a lg:text-lg">
               Your performance exceed 65% of the people conducting the test
               here!
             </div>
@@ -27,79 +82,28 @@ export default function Home() {
         </div>
 
         <div className="flex flex-col font-dark-navy gap-3.5 w-full px-8 lg:w-3/6 lg:px-12 lg:text-lg lg:gap-4">
-          <div className="mt-3.5 font-HankenGrotesk-Bold text-lg lg:text-2xl lg:mt-9.5 lg:mb-3">Summary</div>
-          <div className="bg-red-500 bg-opacity-5 flex justify-between items-center h-14 px-4 rounded-xl">
-            <div className="flex w-95 gap-x-3.5 ">
-              <Image
-                src="/images/icon-reaction.svg"
-                alt="Logo"
-                width={20}
-                height={20}
-                priority
-              />
-              <div className=" font-HankenGrotesk-Medium text-base text-custom-red lg:text-lg">
-                Reaction
+          <div className="mt-3.5 font-HankenGrotesk-Bold text-lg lg:text-2xl lg:mt-9.5 lg:mb-3">
+            Summary
+          </div>
+          {Object.keys(dataParsed).map((data, i) => (
+            <div className={bgColor(i)}>
+              <div className="flex w-95 gap-x-3.5 ">
+                <Image
+                  src={`results-summary-component/${dataParsed[data].icon}`}
+                  alt="Logo"
+                  width={20}
+                  height={20}
+                  priority
+                />
+                <div className={color(i)}>{`${dataParsed[data].category}`}</div>
+              </div>
+              <div className="font-HankenGrotesk-Bold text-dark-navy">
+                <span> {`${dataParsed[data].score}`} </span>
+                <span className="opacity-50">/ 100</span>
               </div>
             </div>
-            <div className="font-HankenGrotesk-Bold text-dark-navy">
-              <span>80 </span>
-              <span className="opacity-50">/ 100</span>
-            </div>
-          </div>
-          <div className="bg-yellow-500 bg-opacity-5 flex justify-between items-center h-14 px-4 rounded-xl">
-            <div className="flex w-95 gap-x-3 ">
-              <Image
-                src="/images/icon-memory.svg"
-                alt="Logo"
-                width={20}
-                height={20}
-                priority
-              />
-              <div className="font-HankenGrotesk-Medium text-base text-custom-yellow lg:text-lg">
-                Memory
-              </div>
-            </div>
-            <div className="font-HankenGrotesk-Bold text-dark-navy">
-              <span>80 </span>
-              <span className="opacity-50">/ 100</span>
-            </div>
-          </div>
-          <div className="bg-green-500 bg-opacity-5 flex justify-between items-center h-14 px-4 rounded-xl">
-            <div className="flex w-95 gap-x-3">
-              <Image
-                src="/images/icon-verbal.svg"
-                alt="Logo"
-                width={20}
-                height={20}
-                priority
-              />
-              <div className="font-HankenGrotesk-Medium text-base text-custom-green lg:text-lg">
-                Verbal
-              </div>
-            </div>
-            <div className="font-HankenGrotesk-Bold text-dark-navy">
-              <span>80 </span>
-              <span className="opacity-50">/ 100</span>
-            </div>
-          </div>
-          <div className="bg-blue-500 bg-opacity-5 flex justify-between items-center h-14 px-4 rounded-xl">
-            <div className="flex w-95 gap-x-3">
-              <Image
-                src="/images/icon-visual.svg"
-                alt="Logo"
-                width={20}
-                height={20}
-                priority
-              />
-              <div className="font-HankenGrotesk-Medium text-base text-custom-blue-a lg:text-lg">
-                Visual
-              </div>
-            </div>
-            <div className="font-HankenGrotesk-Bold text-dark-navy">
-              <span>80 </span>
-              <span className="opacity-50">/ 100</span>
-            </div>
-          </div>
+          ))}
+
           <button className="bg-dark-navy h-14 rounded-full text-white mt-2.5 lg:mt-6.75">
             Continue
           </button>
