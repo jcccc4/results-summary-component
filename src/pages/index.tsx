@@ -5,27 +5,26 @@ export default function Home() {
   interface DataItem {
     [key: string]: any;
     icon: string;
-    category:string;
-    score:string;
+    category: string;
+    score: string;
     // add other properties here as needed
   }
-  const [data, setData] = useState<DataItem| null>(null);
-  
+  const [data, setData] = useState<DataItem | null>(null);
 
   useEffect(() => {
     async function fetchData() {
-      const res = await fetch('/api/data');
+      const res = await fetch("/api/data");
       const json = await res.json();
-      console.log(json)
+      console.log(json);
       setData(json);
     }
-  
+
     fetchData();
-  
+
     // Return a cleanup function that takes no arguments
     return () => {};
   }, []);
-  
+
   if (!data) {
     return <div>Loading...</div>;
   }
