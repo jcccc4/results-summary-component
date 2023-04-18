@@ -102,7 +102,7 @@ export default function Home() {
             <div className={bgColor(i)} key={`item${i}`}>
               <div className="flex w-95 gap-x-3.5 ">
                 <Image
-                  src={`results-summary-component/${data[item].icon}`}
+                  src={`${data[item].icon}`}
                   alt="Logo"
                   width={20}
                   height={20}
