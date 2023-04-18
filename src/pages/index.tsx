@@ -14,7 +14,7 @@ export default function Home() {
 
   useEffect(() => {
     async function fetchData() {
-      const res = await fetch('results-summary-component/api/data');
+      const res = await fetch('/api/data');
       const json = await res.json();
       console.log(json)
       setData(json);
