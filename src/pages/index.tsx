@@ -86,7 +86,7 @@ export default function Home() {
             Summary
           </div>
           {Object.keys(dataParsed).map((data, i) => (
-            <div className={bgColor(i)}>
+            <div className={bgColor(i)} key={`item${i}`}>
               <div className="flex w-95 gap-x-3.5 ">
                 <Image
                   src={`results-summary-component/${dataParsed[data].icon}`}
