@@ -1,19 +1,34 @@
 import Image from "next/image";
-import useSWR from "swr";
+import { useEffect, useState } from "react";
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
 export default function Home() {
-  interface DataParsed {
-    [key: string]: { category: string; score: string; icon: string };
+  interface DataItem {
+    [key: string]: any;
+    icon: string;
+    category:string;
+    score:string;
+    // add other properties here as needed
   }
-  const { data, error } = useSWR("/api/data", fetcher);
+  const [data, setData] = useState<DataItem| null>(null);
+  
 
-  const colors: string[] = ["red", "yellow", "green", "blue"];
-
-  //Handle the error state
-  if (error) return <div>Failed to load</div>;
-  //Handle the loading state
-  if (!data) return <div>Loading...</div>;
+  useEffect(() => {
+    async function fetchData() {
+      const res = await fetch('/api/data');
+      const json = await res.json();
+      console.log(json)
+      setData(json);
+    }
+  
+    fetchData();
+  
+    // Return a cleanup function that takes no arguments
+    return () => {};
+  }, []);
+  
+  if (!data) {
+    return <div>Loading...</div>;
+  }
 
   function bgColor(num: number): string {
     switch (num) {
@@ -53,8 +68,6 @@ export default function Home() {
       }
     }
   }
-
-  let dataParsed: DataParsed = JSON.parse(data);
   return (
     <main className="lg:flex justify-center items-center h-screen w-screen bg-very-light-blue">
       <div className="lg:h-128 lg:flex lg:w-184 bg-white lg:rounded-custom-box-lg">
@@ -85,20 +98,20 @@ export default function Home() {
           <div className="mt-3.5 font-HankenGrotesk-Bold text-lg lg:text-2xl lg:mt-9.5 lg:mb-3">
             Summary
           </div>
-          {Object.keys(dataParsed).map((data, i) => (
+          {Object.keys(data).map((item, i) => (
             <div className={bgColor(i)} key={`item${i}`}>
               <div className="flex w-95 gap-x-3.5 ">
                 <Image
-                  src={`results-summary-component/${dataParsed[data].icon}`}
+                  src={`results-summary-component/${data[item].icon}`}
                   alt="Logo"
                   width={20}
                   height={20}
                   priority
                 />
-                <div className={color(i)}>{`${dataParsed[data].category}`}</div>
+                <div className={color(i)}>{`${data[item].category}`}</div>
               </div>
               <div className="font-HankenGrotesk-Bold text-dark-navy">
-                <span> {`${dataParsed[data].score}`} </span>
+                <span> {`${data[item].score}`} </span>
                 <span className="opacity-50">/ 100</span>
               </div>
             </div>
