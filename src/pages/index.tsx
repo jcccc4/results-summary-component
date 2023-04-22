@@ -105,7 +105,6 @@ export default function Home() {
                   alt="Logo"
                   width={20}
                   height={20}
-                  priority
                 />
                 <div className={color(i)}>{`${data[item].category}`}</div>
               </div>
