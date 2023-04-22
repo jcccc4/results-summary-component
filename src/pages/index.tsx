@@ -68,13 +68,13 @@ export default function Home() {
     }
   }
   return (
-    <main className="lg:flex justify-center items-center h-screen w-screen ">
+    <main className="lg:flex justify-center items-center w-screen  lg:mt-284">
       <div className="lg:h-128 lg:flex lg:w-184 bg-white lg:rounded-custom-box-lg drop-shadow-3xl">
         <div className="bg-gradient-to-b from-violet-a from-0% via-violet-b via-0.01% to-violet-c to-100% h-356  rounded-custom-box flex flex-col items-center lg:h-128 lg:w-3/6  lg:rounded-custom-box-lg">
           <div className="font-HankenGrotesk-Medium text-lg text-light-blue mt-3.5 lg:text-2xl lg:mt-9.5 lg:mb-8.75">
             Your Result
           </div>
-          <div className="bg-gradient-to-b from-circle-a to-circle-b rounded-full h-140 w-140 my-29 text-center flex justify-center items-center flex-col lg:h-50 lg:w-50 lg:mb-6.5">
+          <div className="bg-gradient-to-b from-circle-a to-circle-b rounded-full h-140 w-140  text-center flex justify-center items-center flex-col lg:h-50 lg:w-50 lg:mb-6.5">
             <div className="font-HankenGrotesk-ExtraBold text-56 text-white h-72 lg:text-7xl">
               76
             </div>
